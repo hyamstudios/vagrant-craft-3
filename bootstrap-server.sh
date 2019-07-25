@@ -116,5 +116,5 @@ sudo chmod -R 774 /var/www/html/cpresources
 # LetsEncrypt
 if ! [ "$IS_LOCAL" = true ] ; then
 	sudo apt-get install -y python-certbot-apache
-	sudo certbot --apache -n -d $SITE_DOMAIN -m development@hyam.de
+	sudo certbot --apache -n -d $SITE_DOMAIN -m development@hyam.de --agree-tos
 fi
