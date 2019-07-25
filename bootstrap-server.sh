@@ -73,15 +73,17 @@ if ! [ -f /vagrant/craft/web/index.php ]; then
 	sudo sed -i "s/DB_DATABASE=\"\"/DB_DATABASE=\"$DATABASE\"/" /vagrant/craft/.env
 
 	# Install CraftCMS Plugins
+	cd /vagrant/craft
 	composer require craftcms/webhooks
-	sudo php /vagrant/craft/craft install/plugin webhooks
 	composer require craftcms/redactor
-	sudo php /vagrant/craft/craft install/plugin redactor
 	composer require markhuot/craftql
-	sudo php /vagrant/craft/craft install/plugin craftql
 	composer require verbb/cp-nav
-	sudo php /vagrant/craft/craft install/plugin cp-nav
 	composer require verbb/field-manager
+	cd /
+	sudo php /vagrant/craft/craft install/plugin webhooks
+	sudo php /vagrant/craft/craft install/plugin redactor
+	sudo php /vagrant/craft/craft install/plugin craftql
+	sudo php /vagrant/craft/craft install/plugin cp-nav
 	sudo php /vagrant/craft/craft install/plugin field-manager
 
 	# Set up base url
