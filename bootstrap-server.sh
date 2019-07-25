@@ -3,6 +3,11 @@
 DATABASE='craft'
 DATABASE_PASSWORD='password'
 
+# Create temporary memory swap file
+/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+/sbin/mkswap /var/swap.1
+/sbin/swapon /var/swap.1
+
 # Make sure linux stuff is up-to-date
 sudo apt-get update
 
