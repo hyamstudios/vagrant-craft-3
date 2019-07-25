@@ -33,6 +33,11 @@ For deployment to Digital Ocean, you'll need
 1. Go to `https://YOUR_DOMAIN/admin/install` to finish CraftCMS setup.
 1. Don't forget to rename the droplet in Digital Ocean!
 
+### Tips
+
+- `vagrant destroy digitalocean` will actually destroy(a.k.a. delete) the droplet in Digital Ocean. Be careful!
+- To improve the provisioning process, please setup a testing droplet with `vagrant up digitalocean`, and use `vagrant provision digitalocean` to re-run everything apart from the machine setup. Most of the things in `bootstrap-server.sh` will be applied again.
+
 ## Local Setup
 
 1. Run `vagrant up local` and wait for installation
