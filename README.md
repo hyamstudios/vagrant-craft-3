@@ -8,6 +8,10 @@ Vagrant settings support macOS and Windows. Virtual machine is running Ubuntu 16
 
 Installation includes Xdebug for PHP debugging and Visual Studio Code launch.json.
 
+This tool also helps you setup a Digital Ocean droplet with the same Vagrant setup. Since the only I want from this tool is to setup a hosted CraftCMS instance for headless usage. Nothing will be synced between the local and remote setup. In other words, `vagrant up local` is not required to run `vagrant up digitalocean`.
+
+Some plugins for CraftCMS are installed during the bootstrap. If you don't see them enabled in the CraftCMS dashboard, please go to settings -> plugins and click "install" for each of them again.
+
 ## Requirements
 
 - [Vagrant](https://www.vagrantup.com/)
@@ -33,6 +37,10 @@ For deployment to Digital Ocean, you'll need
 1. Go to `https://YOUR_DOMAIN/admin/install` to finish CraftCMS setup.
 1. Don't forget to rename the droplet in Digital Ocean!
 
+After the above procedure, Vagrant will remember which droplet it provisioned by recording the droplet's id in `.vagrant/machines/digitalocean`.
+
+If you want to create another droplet with the Vagrant setup, simply rename or delete the `.vagrant` folder and start over again.
+
 ### Tips
 
 - `vagrant destroy digitalocean` will actually destroy(a.k.a. delete) the droplet in Digital Ocean. Be careful!
@@ -41,7 +49,7 @@ For deployment to Digital Ocean, you'll need
 ## Local Setup
 
 1. Run `vagrant up local` and wait for installation
-1. Go to http://localhost:8378/admin to finalize Craft installation
+1. Go to http://localhost:8378/admin/install to finalize Craft installation
    1. Fill in fields – password as `password`, database as `craft`
    1. Create first admin account
    1. Enter site details, leaving Base URL = **@web**
