@@ -20,6 +20,7 @@ Installation includes Xdebug for PHP debugging and Visual Studio Code launch.jso
 	1. If desired change port number in Vagrantfile
 1. Run `vagrant up`
 1. Go to http://localhost:8378/admin to finalize Craft installation
+   1. Fill in fields – password as `password`, database as `craft`
    1. Create first admin account
    1. Enter site details, leaving Base URL = **@web**
 
