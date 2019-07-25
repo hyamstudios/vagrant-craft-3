@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
       provider.token = Secret.digital_ocean_token
       provider.image = 'ubuntu-19-04-x64'
       provider.region = 'fra1'
-      provider.size = '1gb'
+      provider.size = '2gb'
     end
     # Run the shell commands
     config.vm.provision "shell",
