@@ -4,9 +4,11 @@ DATABASE='craft'
 DATABASE_PASSWORD='password'
 
 # Create temporary memory swap file
-/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
-/sbin/mkswap /var/swap.1
-/sbin/swapon /var/swap.1
+if ! [ "$IS_LOCAL" = true ] ; then
+	/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+	/sbin/mkswap /var/swap.1
+	/sbin/swapon /var/swap.1
+fi
 
 # Make sure linux stuff is up-to-date
 sudo apt-get update
@@ -112,6 +114,7 @@ sudo chown -R root:www-data /var/www/html/cpresources
 sudo chmod -R 774 /var/www/html/cpresources
 
 # LetsEncrypt
-
-sudo apt-get install -y python-certbot-apache
-sudo certbot --apache -n -d $SITE_DOMAIN -m development@hyam.de
+if ! [ "$IS_LOCAL" = true ] ; then
+	sudo apt-get install -y python-certbot-apache
+	sudo certbot --apache -n -d $SITE_DOMAIN -m development@hyam.de
+fi

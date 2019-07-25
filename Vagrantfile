@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "local" do |local|
-    local.vm.box = "ubuntu/xenial64"
+    local.vm.box = "ubuntu/disco64"
     # Port is usually the phone-coded first 4 characters of the final URL (eg. test.com = 8378)
     local.vm.network "forwarded_port", guest: 80, host: 8378 # Test
     local.vm.network "private_network", type: "dhcp"
@@ -52,6 +52,11 @@ Vagrant.configure(2) do |config|
       vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end
     # Run the shell commands
-    local.vm.provision "shell", path: "bootstrap.sh"
+    local.vm.provision "shell",
+      path: "bootstrap-server.sh",
+      env: {
+        "IS_LOCAL" => true,
+        "SITE_DOMAIN" => Secret.site_domain
+      }
   end
 end
