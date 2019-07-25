@@ -35,6 +35,7 @@ sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/apach
 sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/apache2/php.ini
 sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 16M/" /etc/php/7.0/apache2/php.ini
 sudo sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php/7.0/apache2/php.ini
+sudo sed -i "s/max_execution_time = .*/max_execution_time = 120" /etc/php/7.0/apache2/php.ini
 
 # Enable PHP Xdebug, log file is initially commented out
 sudo sed -i "$ a\ \n[Xdebug]\nxdebug.remote_enable = 1\nxdebug.remote_autostart = 1\nxdebug.remote_connect_back = 1\n; xdebug.remote_log = /vagrant/xdebug.log" /etc/php/7.0/apache2/php.ini
