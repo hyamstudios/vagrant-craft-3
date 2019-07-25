@@ -30,16 +30,17 @@ sudo mysql -u root -p$DATABASE_PASSWORD -e "ALTER DATABASE $DATABASE CHARACTER S
 sudo mysql -u root -p$DATABASE_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
 # Turn on PHP errors and increase upload file size limit
-sudo cp /etc/php/7.0/apache2/php.ini /etc/php/7.0/apache2/php.ini.bak
-sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.0/apache2/php.ini
-sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.0/apache2/php.ini
-sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 16M/" /etc/php/7.0/apache2/php.ini
-sudo sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php/7.0/apache2/php.ini
+sudo cp /etc/php/7.2/apache2/php.ini /etc/php/7.2/apache2/php.ini.bak
+sudo sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.2/apache2/php.ini
+sudo sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.2/apache2/php.ini
+sudo sed -i "s/upload_max_filesize = .*/upload_max_filesize = 16M/" /etc/php/7.2/apache2/php.ini
+sudo sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php/7.2/apache2/php.ini
 sudo sed -i "s/max_execution_time = .*/max_execution_time = 120/" /etc/php/7.2/apache2/php.ini
 
-# Enable PHP Xdebug, log file is initially commented out
-sudo sed -i "$ a\ \n[Xdebug]\nxdebug.remote_enable = 1\nxdebug.remote_autostart = 1\nxdebug.remote_connect_back = 1\n; xdebug.remote_log = /vagrant/xdebug.log" /etc/php/7.0/apache2/php.ini
-echo "Edited php.ini"
+# Do not enable it on production server
+# # Enable PHP Xdebug, log file is initially commented out
+# sudo sed -i "$ a\ \n[Xdebug]\nxdebug.remote_enable = 1\nxdebug.remote_autostart = 1\nxdebug.remote_connect_back = 1\n; xdebug.remote_log = /vagrant/xdebug.log" /etc/php/7.0/apache2/php.ini
+# echo "Edited php.ini"
 
 # AllowOverride in apache
 sudo cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
@@ -67,6 +68,7 @@ if ! [ -f /vagrant/craft/web/index.php ]; then
 	sudo cp /vagrant/craft/config/general.php /vagrant/craft/config/general.php.bak
 	# Use email as username
 	sudo sed -i "s/'securityKey' => getenv('SECURITY_KEY'),/'securityKey' => getenv('SECURITY_KEY'),\n        'useEmailAsUsername' => true,/" /vagrant/craft/config/general.php
+
 	echo "Customized Craft CMS"
 fi
 
@@ -76,3 +78,14 @@ if ! [ -L /var/www/html ]; then
 	sudo ln -fs /vagrant/craft/web /var/www/html
 	echo "Symlinked craft/web folder"
 fi
+
+# Setup File Permission
+sudo chown -R root:www-data /vagrant/craft
+sudo chmod -R 774 /vagrant/craft
+sudo chown -R root:www-data /var/www/html/cpresources
+sudo chmod -R 774 /var/www/html/cpresources
+
+# LetsEncrypt
+
+sudo apt-get install -y python-certbot-apache
+sudo certbot --apache -n -d $SITE_DOMAIN -m development@hyam.de

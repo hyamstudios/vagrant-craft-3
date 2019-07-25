@@ -13,9 +13,16 @@ Installation includes Xdebug for PHP debugging and Visual Studio Code launch.jso
 - [Vagrant](https://www.vagrantup.com/)
 - [Virtual Box](https://www.virtualbox.org/)
 
+For deployment to Digital Ocean, you'll need
+
+- [Vagrant DigitalOcean Plugin](https://github.com/devopsgroup-io/vagrant-digitalocean)
+- [Vagrant Secret Plugin](https://github.com/tcnksm/vagrant-secret)
+
 ## Instructions
 
 1. Clone/download repository
+1. Run `vagrant secret-init`
+1. Use `vagrant-secret-example.yaml` as an example to fill in the Vagrant secret file: `./vagrant/secret.yaml`
 1. Change the main folder name to your project name
 	1. If desired change port number in Vagrantfile
 1. Run `vagrant up`
@@ -27,6 +34,10 @@ Installation includes Xdebug for PHP debugging and Visual Studio Code launch.jso
 **\*Note: Before starting an actual project the .gitignore and .git files will need to be replaced.**
 
 ## Changelog
+
+**2019-07-25**
+
+- Add deploy to digital ocean configuration
 
 **2018-03-30**
 
