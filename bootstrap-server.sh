@@ -58,15 +58,34 @@ sudo a2enmod rewrite
 sudo service apache2 restart
 
 # Install composer and install global (v1.6.2)
-wget https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer -O - -q | php -- --quiet
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
 sudo mv composer.phar /usr/bin/composer
 
 # Install Craft CMS (if not already installed)
 if ! [ -f /vagrant/craft/web/index.php ]; then
   composer create-project -s RC craftcms/craft /vagrant/craft
 
-  	# Set up database
-  	sudo /vagrant/craft/craft setup/db --interactive=0 --database=craft --password=password
+  # Set up database
+	sudo sed -i "s/DB_PASSWORD=\"\"/DB_PASSWORD=\"$DATABASE_PASSWORD\"/" /vagrant/craft/.env
+	sudo sed -i "s/DB_DATABASE=\"\"/DB_DATABASE=\"$DATABASE\"/" /vagrant/craft/.env
+
+	# Install CraftCMS Plugins
+	composer require craftcms/webhooks
+	sudo php /vagrant/craft/craft install/plugin webhooks
+	composer require craftcms/redactor
+	sudo php /vagrant/craft/craft install/plugin redactor
+	composer require markhuot/craftql
+	sudo php /vagrant/craft/craft install/plugin craftql
+	composer require verbb/cp-nav
+	sudo php /vagrant/craft/craft install/plugin cp-nav
+	composer require verbb/field-manager
+	sudo php /vagrant/craft/craft install/plugin field-manager
+
+	# Set up base url
+	sudo echo "DEFAULT_SITE_URL=$SITE_DOMAIN" >> /vagrant/craft/.env
 
 	# Craft adjustments, these are all optional
 	# First back up general config
